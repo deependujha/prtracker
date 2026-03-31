@@ -1,0 +1,67 @@
+[build-system]
+build-backend = "uv_build"
+requires = [ "uv-build>=0.10.8,<0.11" ]
+
+[project]
+name = "prwatch"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+  { name = "deependujha", email = "deependujha21@gmail.com" },
+]
+requires-python = ">=3.12"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+dependencies = [  ]
+
+scripts.prwatch = "prwatch:main"
+
+[dependency-groups]
+dev = [
+  "mypy>=1.19.1",
+  "pre-commit>=4.5.1",
+  "pytest>=9.0.2",
+  "pytest-cov>=7.1",
+  "pytest-xdist>=3.8",
+  "ruff>=0.15.8",
+]
+
+[tool.pytest.ini_options]
+testpaths = [ "tests" ]
+norecursedirs = [ ".git", ".github", "dist", "build", "docs" ]
+addopts = [
+  "--strict-markers",
+  "--doctest-modules",
+  "--color=yes",
+  "--disable-pytest-warnings",
+]
+markers = [ "cloud: Run the cloud tests for example" ]
+filterwarnings = [ "error::FutureWarning" ]
+xfail_strict = true
+junit_duration_report = "call"
+
+[tool.mypy]
+files = [ "src" ]
+exclude = [  ]
+install_types = true
+non_interactive = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+show_error_codes = true
+warn_redundant_casts = true
+warn_unused_configs = true
+warn_unused_ignores = true
+allow_redefinition = true
+disable_error_code = "attr-defined"
+warn_no_return = false
+
+[[tool.mypy.overrides]]
+# generate with:
+# mypy --no-error-summary 2>&1 | tr ':' ' ' | awk '{print $1}' | sort | uniq | sed 's/\.py//g; s|src/||g; s|\/|\.|g'
+module = [  ]
+ignore_errors = true
