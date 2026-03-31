@@ -1,1 +1,1 @@
-"""Test suite for prwatch."""
+"""Test suite for prtracker."""

@@ -3,8 +3,9 @@ build-backend = "uv_build"
 requires = [ "uv-build>=0.10.8,<0.11" ]
 
 [project]
-name = "prwatch"
+name = "prtracker"
 version = "0.1.0"
+
 description = "Add your description here"
 readme = "README.md"
 authors = [
@@ -17,9 +18,12 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
 ]
-dependencies = [  ]
-
-scripts.prwatch = "prwatch:main"
+dependencies = [
+  "pydantic>=2.12.5",
+  "pygithub>=2.9",
+  "python-dotenv>=1.2.2",
+]
+scripts.prtracker = "prtracker:main"
 
 [dependency-groups]
 dev = [
@@ -31,37 +35,103 @@ dev = [
   "ruff>=0.15.8",
 ]
 
+[tool.ruff]
+target-version = "py39"
+line-length = 120
+# Exclude a variety of commonly ignored directories.
+exclude = [
+  ".git",
+  "docs",
+]
+
+format.preview = true
+lint.select = [
+  "E",
+  "F",      # see: https://pypi.org/project/pyflakes
+  "RUF018", # see: https://docs.astral.sh/ruff/rules/assignment-in-assert
+  "S",      # see: https://pypi.org/project/flake8-bandit
+  "UP",     # see: https://docs.astral.sh/ruff/rules/#pyupgrade-up
+  "W",      # see: https://pypi.org/project/pycodestyle
+]
+lint.extend-select = [
+  "C4",     # see: https://pypi.org/project/flake8-comprehensions
+  "I",      # see: isort
+  "PT",     # see: https://pypi.org/project/flake8-pytest-style
+  "RET",    # see: https://pypi.org/project/flake8-return
+  "RUF100", # see: https://docs.astral.sh/ruff/rules/unused-noqa/
+  "SIM",    # see: https://pypi.org/project/flake8-simplify
+]
+lint.ignore = [
+  "E203", # conflicts with black
+  "E731", # Do not assign a lambda expression, use a def
+  "S108",
+]
+lint.per-file-ignores."examples/**" = [
+  "F821", # Undefined name `...`
+  "S101", # Use of `assert` detected
+  "S104", # Possible binding to all interface
+  "S108", # Probable insecure usage of temporary file or directory: "/tmp/data/MNIST"
+  "S113", # todo: Probable use of requests call without
+  "S311", # Standard pseudo-random generators are not suitable for cryptographic purposes
+  "S501", # Probable use of `requests` call with `verify=False` disabling SSL certificate checks
+]
+lint.per-file-ignores."setup.py" = [ "S101" ]
+lint.per-file-ignores."src/**" = [
+  "RET503",
+  "RET504", # todo:Unnecessary variable assignment before `return` statement
+  "S101",   # todo: Use of `assert` detected
+  "S113",   # todo: Probable use of requests call without timeout
+  "S404",   # todo: `subprocess` module is possibly insecure
+  "S602",   # todo: `subprocess` call with `shell=True` identified, security issue
+  "S603",   # todo: `subprocess` call: check for execution of untrusted input
+  "S607",   # todo: Starting a process with a partial executable path
+]
+lint.per-file-ignores."tests/**" = [
+  "PT012", # todo: `pytest.raises()` block should contain a single simple statement
+  "PT019", # todo: Fixture `_` without value is injected as parameter, use `@pytest.mark.usefixtures` instead
+  "S101",  # Use of `assert` detected
+  "S108",  # todo: Probable insecure usage of temporary file or directory: "/tmp/sys-customizations-sync"
+  "S311",  # todo: Standard pseudo-random generators are not suitable for cryptographic purposes
+  "S403",  # `pickle`, `cPickle`, `dill`, and `shelve` modules are possibly insecure
+  "S404",  # `subprocess` module is possibly insecure
+  "S602",  # todo: `subprocess` call with `shell=True` identified, security issue
+  "S603",  # todo: `subprocess` call: check for execution of untrusted input
+  "S607",  # todo: Starting a process with a partial executable path
+]
+# Unlike Flake8, default to a complexity level of 10.
+lint.mccabe.max-complexity = 10
+
 [tool.pytest.ini_options]
-testpaths = [ "tests" ]
-norecursedirs = [ ".git", ".github", "dist", "build", "docs" ]
 addopts = [
   "--strict-markers",
   "--doctest-modules",
   "--color=yes",
   "--disable-pytest-warnings",
 ]
-markers = [ "cloud: Run the cloud tests for example" ]
 filterwarnings = [ "error::FutureWarning" ]
-xfail_strict = true
 junit_duration_report = "call"
+markers = [ "cloud: Run the cloud tests for example" ]
+norecursedirs = [ ".git", ".github", "dist", "build", "docs" ]
+testpaths = [ "tests" ]
+xfail_strict = true
 
 [tool.mypy]
-files = [ "src" ]
+allow_redefinition = true
+disable_error_code = "attr-defined"
+disallow_untyped_defs = true
 exclude = [  ]
+files = [ "src" ]
+ignore_missing_imports = true
 install_types = true
 non_interactive = true
-disallow_untyped_defs = true
-ignore_missing_imports = true
 show_error_codes = true
+warn_no_return = false
 warn_redundant_casts = true
 warn_unused_configs = true
 warn_unused_ignores = true
-allow_redefinition = true
-disable_error_code = "attr-defined"
-warn_no_return = false
 
 [[tool.mypy.overrides]]
 # generate with:
 # mypy --no-error-summary 2>&1 | tr ':' ' ' | awk '{print $1}' | sort | uniq | sed 's/\.py//g; s|src/||g; s|\/|\.|g'
-module = [  ]
 ignore_errors = true
+module = [  ]
