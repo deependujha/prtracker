@@ -41,9 +41,10 @@ repos:
     hooks:
       - id: codespell
         additional_dependencies: [tomli]
-        exclude: >
+        exclude: |
           (?x)^(
-              .*\.ipynb
+              .*\.ipynb|
+              src/prtracker/static/.*
           )$
         #args: ["--write-changes"] # uncomment if you want to get automatic fixing
 

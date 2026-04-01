@@ -3,6 +3,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor
 
 import github
+import uvicorn
 from dotenv import load_dotenv
 from github import Github
 
@@ -37,7 +38,7 @@ def pr_statuses(tracking_prs: list[RepoPR], github_instance: Github, max_workers
     return results
 
 
-def main() -> None:
+def mainu() -> None:
     load_dotenv(dotenv_path=".env")
     github_token = os.getenv("GITHUB_TOKEN")
     if not github_token:
@@ -63,3 +64,8 @@ def main() -> None:
         print(f"    - Closed: {status.is_closed}")
         print(f"    - Error: {status.error_occured}")
         print()
+
+
+def main() -> None:
+    print("Hello from fastapi-htmx!")
+    uvicorn.run("prtracker.server.server:app", host="127.0.0.1", port=8000, reload=True)

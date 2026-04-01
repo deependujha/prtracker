@@ -19,9 +19,12 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
+  "fastapi>=0.135.2",
   "pydantic>=2.12.5",
   "pygithub>=2.9",
   "python-dotenv>=1.2.2",
+  "python-multipart>=0.0.22",
+  "uvicorn>=0.42",
 ]
 scripts.prtracker = "prtracker:main"
 

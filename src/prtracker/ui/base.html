@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport"
+            content="width=device-width, initial-scale=1.0" />
+        <title>{% block title %}PR Tracker{%
+            endblock %}</title>
+
+        <script
+            src="{{ request.url_for('static', path='js/tailwind.js') }}"></script>
+        <script>
+            tailwind.config = {
+                darkMode: 'class',
+                theme: {
+                    extend: {
+                        colors: {
+                            slate: {
+                                950: '#0f172a'
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+
+        <script
+            src="{{ request.url_for('static', path='js/htmx.min.js') }}"
+            defer></script>
+
+        <style>
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.3s ease-in-out;
+            }
+        </style>
+    </head>
+    <body
+        class="bg-slate-950 text-slate-100 font-sans antialiased">
+        {% block content %}{% endblock %}
+    </body>
+</html>

@@ -37,3 +37,14 @@ clean:
 release:
 	chmod +x scripts/bump_version.sh
 	./scripts/bump_version.sh
+
+htmx:
+	mkdir -p src/prtracker/static/js
+	curl -o src/prtracker/static/js/htmx.min.js https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js
+
+tailwind:
+	mkdir -p src/prtracker/static/js
+	curl -o src/prtracker/static/js/tailwind.js https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4
+
+cdn: htmx tailwind
+	@echo "CDN files downloaded successfully."
